@@ -1,0 +1,404 @@
+/* 全局样式 - 现代化设计系统 */
+
+:root {
+  /* 主题色 - 采用现代渐变色系 */
+  --primary-color: #6fa8dc;
+  --primary-light: #d6eaff;
+  --primary-dark: #4576a8;
+  --success-color: #7ed6a2;
+  --warning-color: #ffe08a;
+  --danger-color: #ffb3b3;
+  --info-color: #8ad6ff;
+
+  /* 柔和渐变色 */
+  --gradient-primary: linear-gradient(135deg, #d6eaff 0%, #a3bffa 100%);
+  --gradient-success: linear-gradient(135deg, #e0f7ef 0%, #b8eac7 100%);
+  --gradient-warning: linear-gradient(135deg, #fff6d6 0%, #ffe08a 100%);
+  --gradient-info: linear-gradient(135deg, #e0f7ff 0%, #b3e5fc 100%);
+  
+  /* 中性色 */
+  --text-primary: #1a1a2e;
+  --text-secondary: #666;
+  --text-tertiary: #999;
+  --border-color: #e8e8e8;
+  --bg-color: #f5f7fa;
+  --bg-secondary: #ffffff;
+  
+  /* 阴影 */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: var(--radius-sm);
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Card 优化 */
+.el-card {
+  border-radius: var(--radius-lg) !important;
+  border: none !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.3s ease !important;
+  overflow: hidden !important;
+}
+
+.el-card:hover {
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-2px);
+}
+
+.el-card__header {
+  border-bottom: 1px solid var(--border-color) !important;
+  background: linear-gradient(to right, #f8f9fa, #ffffff) !important;
+  padding: 16px 20px !important;
+  font-weight: 600 !important;
+}
+
+.el-card__body {
+  padding: 20px !important;
+}
+
+/* Button 优化 */
+.el-button {
+  border-radius: var(--radius-md) !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+}
+
+.el-button--primary {
+  background: var(--gradient-primary) !important;
+  border: none !important;
+  color: #2d3a4a !important;
+  box-shadow: 0 2px 8px rgba(111, 168, 220, 0.08);
+}
+
+.el-button--success {
+  background: var(--gradient-success) !important;
+  border: none !important;
+  color: #2d4a3a !important;
+  box-shadow: 0 2px 8px rgba(126, 214, 162, 0.08);
+}
+
+.el-button--warning {
+  background: var(--gradient-warning) !important;
+  border: none !important;
+  color: #665c2d !important;
+  box-shadow: 0 2px 8px rgba(255, 224, 138, 0.08);
+}
+
+.el-button--danger {
+  background: #ffeaea !important;
+  color: #d46a6a !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(255, 179, 179, 0.08);
+}
+
+.el-button--info {
+  background: var(--gradient-info) !important;
+  color: #2d4a5c !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(138, 214, 255, 0.08);
+}
+
+.el-button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* Table 优化 */
+.el-table {
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+}
+
+.el-table th {
+  background: linear-gradient(to right, #f8f9fa, #e9ecef) !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+}
+
+.el-table tr:hover {
+  background-color: #f5f7fa !important;
+}
+
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+  background: #fafafa !important;
+}
+
+/* Tag 优化 */
+.el-tag {
+  border-radius: var(--radius-md) !important;
+  border: none !important;
+  font-weight: 500 !important;
+  padding: 4px 12px !important;
+}
+
+.el-tag--success {
+  background: rgba(82, 196, 26, 0.1) !important;
+  color: var(--success-color) !important;
+}
+
+.el-tag--danger {
+  background: rgba(245, 34, 45, 0.1) !important;
+  color: var(--danger-color) !important;
+}
+
+.el-tag--warning {
+  background: rgba(250, 173, 20, 0.1) !important;
+  color: var(--warning-color) !important;
+}
+
+.el-tag--info {
+  background: rgba(19, 194, 194, 0.1) !important;
+  color: var(--info-color) !important;
+}
+
+/* Input 优化 */
+.el-input__wrapper {
+  border-radius: var(--radius-md) !important;
+  transition: all 0.3s ease !important;
+}
+
+.el-input__wrapper:hover,
+.el-input__wrapper.is-focus {
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+/* Select 优化 */
+.el-select {
+  width: 100%;
+}
+
+.el-select__wrapper {
+  border-radius: var(--radius-md) !important;
+}
+
+/* Dialog 优化 */
+.el-dialog {
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.el-dialog__header {
+  background: linear-gradient(135deg, #eaf3fb 0%, #d6eaff 100%) !important;
+  color: #2d3a4a !important;
+  padding: 20px 24px !important;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0 !important;
+}
+
+.el-dialog__title {
+  color: #2d3a4a !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
+}
+
+.el-dialog__headerbtn .el-dialog__close {
+  color: #4a5568 !important;
+}
+
+/* Message 优化 */
+.el-message {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+  border: none !important;
+}
+
+/* Badge 优化 */
+.el-badge__content {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+}
+
+/* Progress 优化 */
+.el-progress-bar__inner {
+  border-radius: 10px !important;
+}
+
+/* Loading 优化 */
+.el-loading-mask {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* Tooltip 优化 */
+.el-tooltip__popper {
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* 实用工具类 */
+.gradient-bg {
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.shadow-hover {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.shadow-hover:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .el-card__body {
+    padding: 16px !important;
+  }
+  
+  .el-dialog {
+    width: 90% !important;
+  }
+}
+
+/* 图表容器优化 */
+.echarts-container {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: white;
+}
+
+/* 数据卡片优化 */
+.data-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.data-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+}
+
+/* 状态指示器 */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.status-dot.success {
+  background: var(--success-color);
+  box-shadow: 0 0 8px rgba(82, 196, 26, 0.5);
+}
+
+.status-dot.warning {
+  background: var(--warning-color);
+  box-shadow: 0 0 8px rgba(250, 173, 20, 0.5);
+}
+
+.status-dot.danger {
+  background: var(--danger-color);
+  box-shadow: 0 0 8px rgba(245, 34, 45, 0.5);
+}
+
+.status-dot.pulse {
+  animation: pulse 1.5s infinite;
+}

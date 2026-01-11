@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.crypto.api.repository.AlertRecordMapper">
+
+    <!-- 批量标记为已读 -->
+    <update id="batchMarkAsRead">
+        UPDATE alert_records
+        SET is_read = 1, updated_at = NOW()
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!-- 查询预警统计信息 -->
+    <select id="getAlertStatistics" resultType="map">
+        SELECT
+            COUNT(*) as total_count,
+            COUNT(CASE WHEN is_read = 0 THEN 1 END) as unread_count,
+            COUNT(CASE WHEN is_read = 1 THEN 1 END) as read_count,
+            COUNT(CASE WHEN severity = 'CRITICAL' THEN 1 END) as critical_count,
+            COUNT(CASE WHEN severity = 'HIGH' THEN 1 END) as high_count,
+            COUNT(CASE WHEN severity = 'MEDIUM' THEN 1 END) as medium_count,
+            COUNT(CASE WHEN severity = 'LOW' THEN 1 END) as low_count
+        FROM alert_records
+        WHERE trigger_time BETWEEN #{startTime} AND #{endTime}
+    </select>
+
+    <!-- 按类型统计预警数量 -->
+    <select id="countByType" resultType="map">
+        SELECT
+            alert_type as type,
+            COUNT(*) as count
+        FROM alert_records
+        WHERE trigger_time BETWEEN #{startTime} AND #{endTime}
+        GROUP BY alert_type
+        ORDER BY count DESC
+    </select>
+
+    <!-- 按严重程度统计预警数量 -->
+    <select id="countBySeverity" resultType="map">
+        SELECT
+            severity,
+            COUNT(*) as count
+        FROM alert_records
+        WHERE trigger_time BETWEEN #{startTime} AND #{endTime}
+        GROUP BY severity
+        ORDER BY
+            CASE severity
+                WHEN 'CRITICAL' THEN 1
+                WHEN 'HIGH' THEN 2
+                WHEN 'MEDIUM' THEN 3
+                WHEN 'LOW' THEN 4
+            END
+    </select>
+
+    <!-- 删除过期预警 -->
+    <delete id="deleteExpiredAlerts">
+        DELETE FROM alert_records
+        WHERE created_at &lt; DATE_SUB(NOW(), INTERVAL #{days} DAY)
+    </delete>
+
+</mapper>

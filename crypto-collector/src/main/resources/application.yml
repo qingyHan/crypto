@@ -1,0 +1,79 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: crypto-collector
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:19092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 3
+      batch-size: 16384
+      buffer-memory: 33554432
+      compression-type: lz4
+      properties:
+        "[linger.ms]": 10
+        "[max.in.flight.requests.per.connection]": 5
+  # Redis配置
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: 0
+      timeout: 3000ms
+      jedis:
+        pool:
+          max-active: 50
+          max-idle: 20
+          min-idle: 10
+          max-wait: 3000ms
+
+# 管理端点配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+# OKX API 配置
+okx:
+  api:
+    ws-url: wss://ws.okx.com:8443/ws/v5/public
+    base-url: https://www.okx.com
+    # 监控4组主流交易对：BTC、ETH、BNB、SOL
+    # 可通过环境变量 OKX_SYMBOLS 覆盖（格式：BTC-USDT,ETH-USDT,BNB-USDT,SOL-USDT）
+    symbols:
+      - BTC-USDT
+      - ETH-USDT
+      - BNB-USDT
+      - SOL-USDT
+    connection-timeout: 30
+    reconnect-interval: 5
+
+# Kafka自定义主题配置
+kafka-topics:
+  trades: crypto-trades
+  kline: crypto-kline
+  alerts: crypto-alerts
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    "[com.crypto.collector]": INFO
+    "[org.springframework.kafka]": WARN
+    "[org.java_websocket]": INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{50}] - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%logger{50}] - %msg%n"
+  file:
+    name: logs/crypto-collector.log
+    max-size: 100MB
+    max-history: 30

@@ -1,0 +1,176 @@
+# Spring Boot Application Configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
+    connection-timeout: 30000
+    uri-encoding: UTF-8
+
+spring:
+  application:
+    name: crypto-api-service
+
+  # JSON配置 - 确保JSON序列化使用UTF-8
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    generator:
+      write_bigdecimal_as_plain: true # 强制BigDecimal序列化为普通数字字符串(避免科学计数法)
+    serialization:
+      write-dates-as-timestamps: false # 是否将日期时间序列化为时间戳
+
+  # 禁用SQL初始化依赖检测,避免MyBatis mapper bean definition type checking问题
+  sql:
+    init:
+      mode: never
+
+  # MySQL数据源配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource # 数据源类型
+    driver-class-name: com.mysql.cj.jdbc.Driver # 驱动类名
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/crypto_analysis?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&connectionCollation=utf8mb4_unicode_ci
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:123456}
+
+    # Druid连接池配置
+    druid:
+      initial-size: 5 # 初始连接数
+      min-idle: 5 # 最小空闲连接数
+      max-active: 20 # 最大连接数
+      max-wait: 60000 # 获取连接最大等待时间
+      time-between-eviction-runs-millis: 60000 # 连接池中连接的空闲时间
+      min-evictable-idle-time-millis: 300000 # 连接池中连接的最小空闲时间
+      validation-query: SELECT 1 # 验证连接是否有效
+      test-while-idle: true # 连接空闲时进行验证
+      test-on-borrow: false # 获取连接时进行验证
+      test-on-return: false # 归还连接时进行验证
+
+      # 过滤器配置
+      filter:
+        # 统计配置
+        stat:
+          enabled: true # 是否启用统计
+          log-slow-sql: true # 是否记录慢SQL
+          slow-sql-millis: 2000 # 慢SQL时间阈值
+
+  # Redis配置
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: 0
+      timeout: 3000ms
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 10
+          min-idle: 5
+          max-wait: 3000ms
+
+  # Kafka配置
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:19092}
+    consumer:
+      group-id: crypto-api-service
+      auto-offset-reset: latest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      max-poll-records: 100
+    listener:
+      concurrency: 3
+      ack-mode: manual
+
+# ClickHouse数据库配置
+clickhouse-config:
+  url: jdbc:clickhouse://${CLICKHOUSE_HOST:localhost}:${CLICKHOUSE_PORT:8123}/crypto_data?serverTimezone=Asia/Shanghai
+  username: ${CLICKHOUSE_USER:default}
+  password: ${CLICKHOUSE_PASSWORD:}
+  driver-class-name: com.clickhouse.jdbc.ClickHouseDriver
+  pool:
+    maximum-pool-size: 10 # 最大连接数
+    minimum-idle: 2 # 最小空闲连接数
+    connection-timeout: 30000 # 连接超时时间
+    idle-timeout: 600000 # 空闲连接超时时间
+    max-lifetime: 1800000 # 连接最大生命周期
+
+# MyBatis Plus配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.crypto.common.entity,com.crypto.api.entity
+  global-config:
+    db-config:
+      id-type: auto # ID类型
+      logic-delete-field: deleted # 逻辑删除字段
+      logic-delete-value: 1 # 逻辑删除值
+      logic-not-delete-value: 0 # 逻辑未删除值
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+# 日志配置
+logging:
+  level:
+    root: INFO # 全局日志级别：INFO
+    "[com.crypto]": INFO # com.crypto 包：INFO（业务代码）
+    "[com.crypto.api.repository]": INFO # com.crypto.api.repository 包：INFO
+    "[org.springframework.kafka]": WARN # Kafka框架：WARN（只显示警告和错误）
+    "[org.springframework.messaging]": WARN # WebSocket消息：WARN（减少噪音）
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n" # 控制台格式
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n" # 文件格式
+
+  file:
+    name: logs/crypto-api-service.log # 日志文件路径
+    max-size: 100MB # 单个文件最大100MB
+    max-history: 30 # 保留30天历史
+
+# 应用自定义配置
+app-config:
+  # 分页配置
+  page:
+    default-size: 20 # 默认分页大小
+    max-size: 100 # 最大分页大小
+
+  # 缓存配置
+  cache:
+    price-ttl: 30 # 价格缓存过期时间（分钟）
+    kline-ttl: 60 # K线缓存过期时间（分钟）
+    stats-ttl: 300 # 统计缓存过期时间（分钟）
+
+  # 预警配置
+  alert:
+    expired-days: 30 # 预警过期天数
+    batch-size: 100 # 批量处理数量
+
+# Security安全配置
+security-config:
+  jwt:
+    secret: ${JWT_SECRET:crypto-analysis-platform-secret-key-2026}
+    expiration: ${JWT_EXPIRATION:86400000} # 24小时(毫秒)
+
+# Actuator监控端点配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+  metrics:
+    tags:
+      application: ${spring.application.name}
